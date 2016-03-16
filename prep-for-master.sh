@@ -1,15 +1,29 @@
 #!/bin/bash
 
-test=true
+## This script is used to automate my git workflow for committing to master
+##   All work is done on a branch
+##   After the branch has been peer reviewed, rebase it onto master as one commit.
+##    From branch, make $branch-squashed.
+##    Rebase $branch-squashed onto master, and squash down to one commit
+##   Merge the single commit in $branch-squashed onto master (as a fast-forward)
+##   Rename the un-squashed branch to merged-$branch to "archive" it
+
+function usage() {
+    echo "Usage: $0: -b branchName [-d] [-r]"
+    echo
+    echo 'By default, this will update master, rebase branch onto master and squash commits, merge'
+    echo 'branch into master (if only one commit after rebase), then rename branch to merged-$branch'
+    echo '  -b branchName - the branch you want to merge onto master'
+    echo '  -d|--debug - debug: will `set -x` and print out all commands run'
+    echo '  -r|--rename - will rename branch to "merged-$branch"'
+}
+
 branch=''
 debug=false
 action='all'
 while [[ $# > 0 ]] ; do
     key="$1"
     case $key in
-        -a|--auto)
-            test=false
-            ;;
         -b|--branch)
             branch="$2"
             ;;
@@ -25,6 +39,7 @@ done
 
 if [ -z "$branch" ] ; then
     echo "Must provide a branch name to squash against master"
+    usage
     exit 1
 fi
 
@@ -43,12 +58,6 @@ function rebase_onto_master() {
     # go to the branch, make a new branch for the squashed commits, then rebase onto master
     git checkout $branch
     git checkout -b $squash
-
-    if $test; then
-        echo "Finished testing before rebase.  Check that everything is good, then perform"
-        echo "$0 --rebase"
-        return 0
-    fi
     git rebase -i master
 }
 
@@ -58,12 +67,13 @@ function merge_to_master() {
         echo "ERROR: Squashed branch ($squash) isn't small enough."
         echo "       Should have only 1 commit but have $number_of_commits between master and this branch"
         echo "       Fix with a manual 'git rebase -i master'"
-        exit 10
+        return 10
     fi
     git checkout master
     git merge $squash
-    echo "Time to push me up to origin :)"
-    git diff --name-status origin/master
+
+    # should be able to use -d since everything was merged into master
+    git branch -d $squash
 }
 
 function rename_merged_branch() {
@@ -82,6 +92,8 @@ if [ "$action" == 'all' ] ; then
     rebase_onto_master
     merge_to_master
     rename_merged_branch
+    echo "Time to push master"
+    git diff --name-status origin/master
 elif [ "$action" == 'rename' ] ; then
     echo "Just renaming branch"
     rename_merged_branch
