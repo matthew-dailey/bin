@@ -43,7 +43,7 @@ if [ -z "$branch" ] ; then
     exit 1
 fi
 
-squash=$branch-squash
+unsquashed=$branch-unsquashed
 
 set -e
 $debug && set -x
@@ -57,26 +57,28 @@ function rebase_onto_master() {
 
     # go to the branch, make a new branch for the squashed commits, then rebase onto master
     git checkout $branch
-    git checkout -b $squash
+    git checkout -b $unsquashed
+    git checkout $branch
     git rebase -i master
 }
 
 function merge_to_master() {
-    number_of_commits=$(git rev-list master..$squash --count)
+    number_of_commits=$(git rev-list master..$branch --count)
     if [ $number_of_commits -ne 1 ] ; then
-        echo "ERROR: Squashed branch ($squash) isn't small enough."
+        echo "ERROR: Squashed branch ($branch) isn't small enough."
         echo "       Should have only 1 commit but have $number_of_commits between master and this branch"
         echo "       Fix with a manual 'git rebase -i master'"
         return 10
     fi
     git checkout master
-    git merge $squash
+    git merge $branch
 
-    # should be able to use -d since everything was merged into master
-    git branch -d $squash
+    # could delete branch here, but probably better to force push branch up so that
+    # pushing to master after will close the PR (GitHub specific)
 }
 
 function rename_merged_branch() {
+    local branch=$1
     if [ "$branch" == "master" ] ; then
         echo "Sorry, I won't rename the master branch"
         return 20
@@ -91,10 +93,12 @@ if [ "$action" == 'all' ] ; then
     echo "Running the whole process"
     rebase_onto_master
     merge_to_master
-    rename_merged_branch
-    echo "Time to push master"
+    rename_merged_branch $unsquashed
+    echo "Now you should:"
+    echo "  Force push $branch"
+    echo "  Push master"
     git diff --name-status origin/master
 elif [ "$action" == 'rename' ] ; then
     echo "Just renaming branch"
-    rename_merged_branch
+    rename_merged_branch $branch
 fi
