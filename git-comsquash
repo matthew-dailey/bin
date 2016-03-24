@@ -1,0 +1,11 @@
+#!/bin/sh
+
+## Use comsquash when you want to commit unstaged changes, then squash that commit into the last commit.
+## Usually, use this is when you realize you forgot to add something to a previous commit (like a typo).
+
+## Usage: git comsquash
+
+source "$(git --exec-path)/git-sh-setup"
+
+git commit -am 'squash!'
+git rebase -i HEAD~2
