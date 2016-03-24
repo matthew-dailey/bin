@@ -1,0 +1,11 @@
+#!/bin/bash
+
+## Usage: find-java [dir]
+##  if no [dir], uses '.'
+
+dir=.
+if [ -n "$1" ] ; then
+    dir="$1"
+fi
+
+find "$dir" -name '*.java'
