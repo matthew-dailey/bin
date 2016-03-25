@@ -51,9 +51,9 @@ function rebase_onto_master() {
     # make sure branch exists, fail if it doesn't
     git checkout $branch
 
-    # make master up-to-date
+    # make master up-to-date.  pull with --rebase just in case local master has any un-pushed changes
     git checkout master
-    git pull
+    git pull --rebase
 
     # go to the branch, make a new branch for the squashed commits, then rebase onto master
     git checkout $branch
@@ -97,7 +97,8 @@ if [ "$action" == 'all' ] ; then
     echo "Now you should:"
     echo "  Force push $branch"
     echo "  Push master"
-    git diff --name-status origin/master
+    git diff --stat origin/master..master
+    git checkout $branch
 elif [ "$action" == 'rename' ] ; then
     echo "Just renaming branch"
     rename_merged_branch $branch
