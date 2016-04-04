@@ -1,0 +1,18 @@
+#!/bin/sh
+
+## Make a git repo use my personal email locally (since I use my professional one by default)
+
+source "$(git --exec-path)/git-sh-setup"
+
+personal_email=$(git config --get personal.email)
+if [ -z "$personal_email" ] ; then
+    echo "Error. Could not find a personal email in global properties"
+    echo "Set a personal email in personal.email with 'git config --global personal.email me@example.com'"
+    exit 1
+fi
+
+set -e
+git config --local user.email "$personal_email"
+
+echo "Repo's email address:"
+git config --get user.email
