@@ -55,9 +55,14 @@ function rebase_onto_master() {
     git checkout master
     git pull --rebase
 
-    # go to the branch, make a new branch for the squashed commits, then rebase onto master
+    # first, rebase unsquashed branch onto master normally
     git checkout $branch
-    git checkout -b $unsquashed
+    git rebase master
+
+    # then, make a new branch for the unsquashed commits
+    git branch $unsquashed $branch
+
+    # then squash commits on $branch between it and master
     git checkout $branch
     git rebase -i master
 }
