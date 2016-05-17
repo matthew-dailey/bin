@@ -1,0 +1,19 @@
+#!/bin/bash
+
+## Use rename-merged when you want to locally "archive" a branch that was
+## squashed and merged on the remote (e.g. GitHub)
+
+## Usage: git rename-merged <branch-name>
+## Effect: Branch 'branchName' renamed to '+merged-branchName-unsquashed'
+
+source "$(git --exec-path)/git-sh-setup"
+
+branch="$1"
+if [ -z "$branch" ] ; then
+    echo "Usage: git rename-merged <branch-name>"
+    exit 1
+fi
+
+# prepends new branch name with '+' so that it sorts before capital letters and is out of the way
+# of other jira-ticket-based names (like ASDF-1234)
+git branch -m "$branch" +merged-"$branch"-unsquashed
