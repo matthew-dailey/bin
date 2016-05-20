@@ -1,18 +1,18 @@
-#!/bin/sh
+#!/bin/bash
 
 ## This script just checks out master, pulls master, then fetches and prunes branches
 
-## Usage: git update-master
+## Usage: git update-master [--return]
 
 source "$(git --exec-path)/git-sh-setup"
 
-USAGE=''
-function _doitall {
-    set -e
-    git checkout master
-    git pull
-    git fetch -p
-    set +e
-}
-
-_doitall
+set -e
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+git checkout master
+git pull
+git fetch -p
+if [ x"$1" == x'--return' ] ; then
+    # return to the branch you started on
+    git checkout $current_branch
+fi
+set +e
