@@ -1,0 +1,30 @@
+#!/bin/bash
+
+## List java files that contain the provided phrase
+
+dir=.
+phrase=''
+while [[ $# > 1 ]]
+do
+    key="$1"
+
+    case $key in
+        -d|--dir)
+            dir="$2"
+            shift
+            ;;
+        -s|--search)
+            phrase="$2"
+            shift
+            ;;
+    esac
+    shift # past argument or value
+done
+
+if [ -z "$phrase" ] ; then
+    echo "Missing search phrase"
+    echo "Usage: $0 -s 'grep syntax' [-d dir to find files]"
+    exit 1
+fi
+
+find "$dir" -name '*.java' | xargs grep "$phrase" | awk -F ':' '{print $1}' | sort | uniq
