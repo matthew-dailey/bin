@@ -1,0 +1,41 @@
+#!/bin/bash
+
+function usage() {
+    echo "Usage: $0 -n [times] -- [command]"
+    echo " e.g.: $0 -n 5 -- mvn clean test"
+}
+
+finished=''
+times=1
+while [[ $# > 1 ]] && [[ -z $finished ]]
+do
+    key="$1"
+
+    case $key in
+        --)
+            finished=true
+            ;;
+        -n)
+            times="$2"
+            ;;
+    esac
+    shift # past argument or value
+done
+
+if [[ -z "$@" ]] || [[ -z "$finished" ]] ; then
+    usage
+    exit 1
+fi
+
+# run the command however many times it was requested
+command="$@"
+i=0
+while [[ $i -lt $times ]] ; do
+    i=$((i + 1))
+    sh -x -c "$command"
+    result=$?
+    if [ $result != 0 ] ; then
+        echo "FATAL: Failed on iteration $i"
+        exit $result
+    fi
+done
