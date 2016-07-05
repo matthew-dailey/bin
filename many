@@ -1,8 +1,10 @@
 #!/bin/bash
 
 function usage() {
-    echo "Usage: $0 -n [times] -- [command]"
+    echo "Usage: $0 [-c] [-n times] -- command"
+    echo "   -c: count number of failures"
     echo " e.g.: $0 -n 5 -- mvn clean test"
+    echo "   or: $0 -c -n 5 -- mvn clean test"
 }
 
 count=false
