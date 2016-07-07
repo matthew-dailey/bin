@@ -59,9 +59,11 @@ while [[ $i -lt $times ]] ; do
         num_failures=$((num_failures + 1))
     fi
 done
-echo "Number of failures of total: $num_failures of $times"
+echo "Number of failures: $num_failures"
+echo "Number of runs completed/total: ${i}/${times}"
 }
 
+# TODO: handle abort ($? == 130)
 if [[ "$count" == true ]] ; then
     echo "Counting failures"
     count_failures "$@"
