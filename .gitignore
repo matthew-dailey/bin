@@ -1,1 +1,4 @@
 *.swp
+
+# any downloaded artifacts
+cache/
