@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ## Takes the PDFs of Verizon Wireless and Verizon FiOS bills, and extracts the relevant pages
-## for getting expensing the bill to your company.
+## for expensing the bill to your company.
 
 function usage() {
     echo "Usage: $0 -f fios_pdf_path -w wireless_pdf_path"
@@ -64,3 +64,5 @@ fi
 EXEC="java -jar $JAR PDFSplit"
 $EXEC -startPage 1 -endPage 3 $fios_file
 $EXEC -startPage 1 -endPage 3 $wireless_file
+
+# TODO: print out names of new files.  It should be ${input_path_without_pdf}-1.pdf
