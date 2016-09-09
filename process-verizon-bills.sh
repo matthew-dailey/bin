@@ -65,4 +65,20 @@ EXEC="java -jar $JAR PDFSplit"
 $EXEC -startPage 1 -endPage 3 $fios_file
 $EXEC -startPage 1 -endPage 3 $wireless_file
 
-# TODO: print out names of new files.  It should be ${input_path_without_pdf}-1.pdf
+# get some file name pieces parsed out
+fios_dirname=$(dirname $fios_file)
+fios_filename=$(basename $fios_file)
+fios_filename_noext=$(echo $fios_filename | perl -pe 's:\.pdf$::')
+fios_cropped_name=$fios_filename_noext-cropped.pdf
+fios_cropped_path=$fios_dirname/$fios_cropped_name
+
+wireless_dirname=$(dirname $wireless_file)
+wireless_filename=$(basename $wireless_file)
+wireless_filename_noext=$(echo $wireless_filename | perl -pe 's:\.pdf$::')
+wireless_cropped_name=$wireless_filename_noext-cropped.pdf
+wireless_cropped_path=$wireless_dirname/$wireless_cropped_name
+
+mv $fios_dirname/$fios_filename_noext-1.pdf $fios_cropped_path
+mv $wireless_dirname/$wireless_filename_noext-1.pdf $wireless_cropped_path
+
+echo "Created $fios_cropped_path and $wireless_cropped_path"
