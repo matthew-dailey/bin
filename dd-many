@@ -1,0 +1,33 @@
+#!/bin/bash
+
+## Script to start up many instances of dd, and clean up after them when finished
+## Tested on OSX El Capitan
+# ~$ dd-many 4
+# Following pids running dd:  13768 13769 13770 13771
+# Use Ctrl-D to kill them
+# + kill 13768 13769 13770 13771
+
+num_dds=$1
+
+# if not provided, or not a number
+if [ -z "$num_dds" ] || ! [ "$num_dds" -eq "$num_dds" ] ; then
+    echo "Usage: $0 [number of dd instances to run]"
+    exit 1
+fi
+
+pids=''
+for i in $(seq 1 $num_dds) ; do
+    dd if=/dev/zero of=/dev/null &
+    pid=$!
+    pids="$pids $pid"
+done
+
+echo "Following pids running dd: $pids"
+echo "Use Ctrl-D to kill them"
+
+# wait for Ctrl-D
+while read ; do true ; done
+
+# dd responds to SIGINT properly
+set -x
+kill $pids
