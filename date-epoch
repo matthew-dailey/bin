@@ -1,0 +1,20 @@
+#!/bin/bash
+
+## OSX or Linux timestamp parser that accepts either seconds or milliseconds
+
+if [ -z "$1" ] ; then
+    echo "Usage: $0 timestamp"
+    echo "  timestamp can be seconds or milliseconds"
+fi
+
+# first ten characters will work until Sat Nov 20 12:46:40 EST 2286
+timestamp=$(echo -n "$1" | cut -c 1-10)
+
+# accepts an epoch-timestamp in seconds or milliseconds
+unix_name="$(uname)"
+if [ "$unix_name" == Darwin ] ; then
+    date -r "$timestamp"
+else
+    # just try the Linuxy way
+    date -d @"$timestamp"
+fi
