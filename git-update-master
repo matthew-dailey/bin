@@ -2,16 +2,33 @@
 
 ## This script just checks out master, pulls master, then fetches and prunes branches
 
-## Usage: git update-master [--return]
+## Usage: git update-master [--return] [--remote remote]
 
 source "$(git --exec-path)/git-sh-setup"
+
+remote=origin
+while [[ $# > 1 ]]
+do
+    key="$1"
+
+    case "$key" in
+        --return)
+            return_to_branch=true
+            ;;
+        --remote)
+            remote="$2"
+            shift
+            ;;
+    esac
+    shift
+done
 
 set -e
 current_branch=$(git rev-parse --abbrev-ref HEAD)
 git checkout master
-git pull
-git fetch -p
-if [ x"$1" == x'--return' ] ; then
+git pull "$remote" master
+git fetch -p "$remote"
+if [ "$return_to_branch" == 'true' ] ; then
     # return to the branch you started on
     git checkout $current_branch
 fi
