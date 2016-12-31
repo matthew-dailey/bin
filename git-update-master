@@ -4,10 +4,12 @@
 
 ## Usage: git update-master [--return] [--remote remote]
 
+USAGE="[--return] [--remote remote]"
 source "$(git --exec-path)/git-sh-setup"
 
 remote=origin
-while [[ $# > 1 ]]
+return_to_branch=''
+while [[ $# > 0 ]]
 do
     key="$1"
 
