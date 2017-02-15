@@ -1,0 +1,24 @@
+#!/bin/sh
+
+## Use pr-branch to make a branch named "pr-<branchname>" from a remote branch.
+
+## Usage: git pr-branch <branchname>
+
+source "$(git --exec-path)/git-sh-setup"
+
+branchname="$1"
+
+if [ -z "$branchname" ]; then
+    echo "Usage: git pr-branch <branchname>"
+    echo "  note: <branchname> may require <remote>/<branchname> e.g. origin/FOO-1234"
+    exit 1
+fi
+
+# TODO: this doesn't work with branches named like "experiment/matt/something-crazy"
+branchname_noremote=$(echo "$branchname" | awk -F / '{print $NF}')
+newbranchname=pr-"$branchname_noremote"
+
+git branch "$newbranchname" "$branchname"
+if [ $? != 0 ] ; then
+    echo "Did you mean to provide branch origin/${branchname}?"
+fi
