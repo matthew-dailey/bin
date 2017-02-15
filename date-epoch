@@ -5,6 +5,7 @@
 if [ -z "$1" ] ; then
     echo "Usage: $0 timestamp"
     echo "  timestamp can be seconds or milliseconds"
+    exit 1
 fi
 
 # first ten characters will work until Sat Nov 20 12:46:40 EST 2286
