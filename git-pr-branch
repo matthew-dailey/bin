@@ -21,4 +21,6 @@ newbranchname=pr-"$branchname_noremote"
 git branch "$newbranchname" "$branchname"
 if [ $? != 0 ] ; then
     echo "Did you mean to provide branch origin/${branchname}?"
+    exit 1
 fi
+git checkout "$newbranchname"
