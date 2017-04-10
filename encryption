@@ -1,0 +1,41 @@
+#!/bin/bash
+
+## Helper functions to do encryption based on this stackoverflow Q&A
+## http://stackoverflow.com/questions/16056135/how-to-use-openssl-to-encrypt-decrypt-files
+
+## Example Usage:
+## $> source ~/encryption
+## $> encrypt infile outfile
+
+ALGORITHM=aes-256-cbc
+FLAGS=-salt
+
+function encrypt() {
+  local infile outfile
+  infile="$1"
+  outfile="$2"
+
+  if [[ -z "$infile" ]] || [[ -z "$outfile" ]] ; then
+      echo "Usage: encrypt infile encrypted_filename"
+      return 1
+  fi
+
+  openssl "$ALGORITHM" "$FLAGS" -in "$infile" -out "$outfile"
+}
+
+function decrypt() {
+  local infile outfile
+  infile="$1"
+  outfile="$2"
+
+  if [[ -z "$infile" ]] || [[ -z "$outfile" ]] ; then
+      echo "Usage: decrypt encrypted_filename outfile"
+      return 1
+  fi
+
+  openssl "$ALGORITHM" "$FLAGS" -d -in "$infile" -out "$outfile"
+}
+
+function openssl-list-ciphers() {
+  openssl list-cipher-commands
+}
