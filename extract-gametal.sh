@@ -12,7 +12,7 @@ fi
 destination="$HOME/Music/GaMetal"
 mkdir -p "$destination"
 
-for zipfile in ~/Downloads/GaMetal*; do
+for zipfile in ~/Downloads/GaMetal*.zip; do
     # if there are no files, $zipfile will just be "~/Downloads/GaMetal*" which doesn't exist
     if [ -f "$zipfile" ] ; then
         unzip "$zipfile" -d "$destination"
