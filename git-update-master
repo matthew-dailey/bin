@@ -1,19 +1,25 @@
 #!/bin/bash
 
 ## This script just checks out master, pulls master, then fetches and prunes branches
+## Can use a different branch for 'master' with the --master flag
 
-## Usage: git update-master [--return] [--remote remote]
+## Usage: git update-master [--return] [--remote remote] [--master branchname]
 
-USAGE="[--return] [--remote remote]"
+USAGE="[--return] [--remote remote] [--master branchname]"
 source "$(git --exec-path)/git-sh-setup"
 
 remote=origin
 return_to_branch=''
+master_branch=master
 while [[ $# > 0 ]]
 do
     key="$1"
 
     case "$key" in
+        --master)
+            master_branch="$2"
+            shift
+            ;;
         --return)
             return_to_branch=true
             ;;
@@ -21,14 +27,17 @@ do
             remote="$2"
             shift
             ;;
+        *)
+            echo "Unrecognized flag $key"
+            usage
     esac
     shift
 done
 
 set -e
 current_branch=$(git rev-parse --abbrev-ref HEAD)
-git checkout master
-git pull "$remote" master
+git checkout "${master_branch}"
+git pull "$remote" "${master_branch}"
 git fetch -p "$remote"
 if [ "$return_to_branch" == 'true' ] ; then
     # return to the branch you started on
