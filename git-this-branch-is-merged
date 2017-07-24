@@ -14,5 +14,5 @@ if [[ "$current_branch" == 'master' ]] ; then
     exit 10
 fi
 
-git update-master
+git update-master $@
 git rename-merged "$current_branch"
