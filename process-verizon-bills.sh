@@ -63,7 +63,7 @@ fi
 # need pages 1,2,3 for wireless
 EXEC="java -jar $JAR PDFSplit"
 $EXEC -startPage 1 -endPage 3 $fios_file
-$EXEC -startPage 1 -endPage 3 $wireless_file
+$EXEC -startPage 1 -endPage 1 $wireless_file
 
 # get some file name pieces parsed out
 fios_dirname=$(dirname $fios_file)
