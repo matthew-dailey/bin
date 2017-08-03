@@ -1,0 +1,31 @@
+#!/bin/bash
+
+## Rebase against a remote version of this branch.
+## Useful when squashing commits before pushing to an existing branch.
+## Can provide a remote other than 'origin' with --remote flag
+
+## Usage: git rebase-remote [--remote remote]
+
+USAGE="[--remote remote]"
+source "$(git --exec-path)/git-sh-setup"
+
+remote=origin
+while [[ $# > 0 ]]
+do
+    key="$1"
+
+    case "$key" in
+        --remote)
+            remote="$2"
+            shift
+            ;;
+        *)
+            echo "Unrecognized flag $key"
+            usage
+    esac
+    shift
+done
+
+set -e
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+git rebase -i ${remote}/${current_branch}
