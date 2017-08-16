@@ -1,7 +1,7 @@
 #!/bin/sh
 
 ## Use comsquash when you want to commit unstaged changes, then squash that commit into the last commit.
-## Usually, use this is when you realize you forgot to add something to a previous commit (like a typo).
+## Usually, use this when you realize you forgot to add something to a previous commit (like a typo).
 
 ## Usage: git comsquash
 
