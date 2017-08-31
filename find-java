@@ -3,9 +3,5 @@
 ## Usage: find-java [dir]
 ##  if no [dir], uses '.'
 
-dir=.
-if [ -n "$1" ] ; then
-    dir="$1"
-fi
-
-find "$dir" -name '*.java'
+# just delegates to find-ext now
+find-ext java $@
