@@ -1,0 +1,22 @@
+#!/bin/bash
+
+## find-ext is used to find all files with a given file extension
+
+function usage() {
+    echo "Usage: $0 extension [rootDir]"
+    echo "  e.g. $0 groovy src/min/groovy"
+}
+
+if [ -n "$1" ] ; then
+    ext="*.$1"
+else
+    usage
+    exit 10
+fi
+
+dir=.
+if [ -n "$2" ] ; then
+    dir="$2"
+fi
+
+find "$dir" -name "$ext"
