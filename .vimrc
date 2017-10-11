@@ -18,8 +18,10 @@ nnoremap <C-H> <C-W><C-H>
 
 " End super-standard vimrc
 
-execute pathogen#infect()
+" if pathogen is on this system, start it up
+if filereadable(expand("~/.vim/autoload/pathogen.vim"))
+    execute pathogen#infect()
 
-
-" ignore python-compiled files in NERDTree file browser
-let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
+    " ignore python-compiled files in NERDTree file browser
+    let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
+endif
