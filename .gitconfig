@@ -1,0 +1,32 @@
+# gitconfig template.
+[core]
+    autocrlf = input
+    editor = vim
+	ignorecase = false
+[alias]
+    squash = rebase -i HEAD~2
+    ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%an]" --decorate
+    hist = log --graph --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%an]\\ %Creset%C(yellow)(%ar)" --decorate
+    hist-body = log --graph --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%B%Cblue" --decorate
+    h = log --graph --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%an]\\ %Creset%C(yellow)(%ar)" --decorate
+    hb = log --graph --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%B%Cblue" --decorate
+    co = checkout
+    cm = checkout master
+    br = branch
+    bra = branch -av
+    brc = branch -a --contains
+    current-branch = rev-parse --abbrev-ref HEAD
+    d = diff
+    dc = diff --color-words
+    diffw = diff --color-words
+    dw = diff --color-words
+    diffn = diff --name-only
+    dn = diff --name-only
+    diffs = diff --name-status
+    ds = diff --name-status
+    d-s = diff --stat
+    d-sl = diff --stat --stat-width=250 --stat-name-width=250
+    um = update-master
+    umr = update-master --return
+[push]
+    default = simple
