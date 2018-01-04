@@ -1,0 +1,46 @@
+#!/bin/bash
+
+## List or delete all PR branches (see git-pr-branch)
+
+## Usage: git prls [--delete] [--force]
+
+function Usage() {
+  echo "Usage: git prls [--delete] [--force]"
+  echo "       --delete - if you want to delete the PR branches"
+  echo "       --force - force branch deletion for unmerged changes (like git rm -D)"
+}
+
+source "$(git --exec-path)/git-sh-setup"
+
+delete=''
+delete_flag='-d'
+while [[ $# > 0 ]]
+do
+    key="$1"
+
+    case "$key" in
+        --delete)
+            delete='--delete'
+            ;;
+        --force)
+            delete_flag='-D'
+            ;;
+        *)
+            echo "Unrecognized flag $key"
+            Usage
+            exit 10
+    esac
+    shift
+done
+
+branches=$(git branch | grep '^  pr-')
+if [[ -z "$branches" ]] ; then
+    echo "No PR branches found"
+    exit 0
+fi
+
+if [[ "$delete" != '--delete' ]] ; then
+    echo "$branches"
+else
+    echo "$branches" | xargs git branch "$delete_flag"
+fi

@@ -69,7 +69,9 @@ fi
 
 ###########################################################
 ### Java
-export JAVA_HOME=$(/usr/libexec/java_home -v 1.7)
+export JAVA7_HOME=$(/usr/libexec/java_home -v 1.7 2> /dev/null)
+export JAVA8_HOME=$(/usr/libexec/java_home -v 1.8 2> /dev/null)
+export JAVA_HOME="$JAVA7_HOME"
 
 # java respecting JAVA_HOME:  /System/Library/Frameworks/JavaVM.framework/Versions/Current/Commands/java
 java7_path=/Library/Java/JavaVirtualMachines/jdk1.7.0_80.jdk/Contents/Home/bin/java
@@ -77,10 +79,13 @@ java8_path=/Library/Java/JavaVirtualMachines/jdk1.8.0_74.jdk/Contents/Home/bin/j
 java7crypto_path=/Library/Java/JavaVirtualMachines/jdk1.7.0_80.jdk-crypto/Contents/Home
 
 export MAVEN_OPTS='-XX:MaxPermSize=1G -Xms2G -Xmx2G'
-export SKIP_STUFF='-Dcheckstyle.skip=true -Denforcer.skip=true -Dmaven.javadoc.skip=true'
+export SKIP_STUFF='-Dfindbugs.skip -Dcheckstyle.skip=true -Denforcer.skip=true -Dmaven.javadoc.skip=true'
 export SKIP_FRONTEND='-Dskip.yarn'
 export ALPHABETIC='-Dsurefire.runOrder=alphabetical'
 export REV_ALPHABETIC='-Dsurefire.runOrder=reversealphabetical'
+
+# Any SBT options can go here
+export SBT_OPTS="$SBT_OPTS -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M"
 
 # compile with 7, run surefire tests with 8
 alias mvn8test="mvn -Dsurefire.jvm=${java8_path} -Dfailsafe.jvm=${java8_path}"

@@ -19,4 +19,4 @@ if [ -n "$2" ] ; then
     dir="$2"
 fi
 
-find "$dir" -name "$ext"
+find "$dir" -type f -name "$ext"

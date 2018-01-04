@@ -9,15 +9,18 @@ function usage() {
 
 HERE=$(dirname $0)
 CACHE_DIR=$HERE/cache
-JAR_NAME=pdfbox-app-2.0.2.jar
+MIRROR_ROOT=http://ftp.wayne.edu/apache/pdfbox/
+VERSION=2.0.8
+JAR_NAME=pdfbox-app-${VERSION}.jar
 JAR=$CACHE_DIR/$JAR_NAME
-EXPECTED_SHA1=5478cf672489319bd4ccd635dd29f7478bf8b385
+EXPECTED_SHA1=2754fd5d15aeb4b0dd55aef3328e7e3f0eacbd3b
 
 function get_jar() {
     if ! [ -e $JAR ] ; then
-        echo "Downloading $JAR_NAME jar to $JAR"
+        local url="${MIRROR_ROOT}/${VERSION}/${JAR_NAME}"
+        echo "Downloading ${url} jar to $JAR"
         mkdir -p $CACHE_DIR
-        curl http://www.motorlogy.com/apache/pdfbox/2.0.2/$JAR_NAME -o $JAR
+        curl "${url}" -o $JAR
     fi
     local sha1=''
     if which shasum &> /dev/null ; then
